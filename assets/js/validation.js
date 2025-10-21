@@ -527,38 +527,7 @@
     }
   }
 
-  class ChamCongValidator extends FormValidator {
-    constructor() {
-      super('cham-cong-form');
-      this.setupChamCongRules();
-    }
 
-    setupChamCongRules() {
-      // Employee selection validation
-      this.addRule('employeeId', {
-        required: true,
-        message: 'Vui lòng chọn nhân viên'
-      });
-
-      // Attendance date validation
-      this.addRule('attendanceDate', {
-        required: true,
-        date: true,
-        message: 'Ngày chấm công không hợp lệ'
-      });
-
-      // Check-in time validation
-      this.addRule('checkIn', {
-        required: true,
-        message: 'Vui lòng nhập giờ vào'
-      });
-
-      // Check-out time validation (optional)
-      this.addRule('checkOut', {
-        message: 'Giờ ra không hợp lệ'
-      });
-    }
-  }
 
   // Export validators
   window.FormValidator = FormValidator;
@@ -567,7 +536,6 @@
   window.DuocPhamValidator = DuocPhamValidator;
   window.KhoValidator = KhoValidator;
   window.NhanSuValidator = NhanSuValidator;
-  window.ChamCongValidator = ChamCongValidator;
   window.ValidationRules = ValidationRules;
 
 })();

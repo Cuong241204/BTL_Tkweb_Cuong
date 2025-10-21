@@ -180,9 +180,7 @@
       window.nhanSuValidator = new NhanSuValidator();
     }
 
-    if (document.getElementById('cham-cong-form')) {
-      window.chamCongValidator = new ChamCongValidator();
-    }
+
 
     // Thêm validation cho tất cả form khi submit
     document.querySelectorAll('form').forEach(form => {
@@ -212,7 +210,6 @@
       case 'duocpham-form': return window.duocPhamValidator;
       case 'kho-form': return window.khoValidator;
       case 'nhan-su-form': return window.nhanSuValidator;
-      case 'cham-cong-form': return window.chamCongValidator;
       default: return null;
     }
   }
@@ -338,10 +335,6 @@
       console.log('Đã khởi tạo dữ liệu nhân sự mẫu');
     }
 
-    // Khởi tạo dữ liệu chấm công
-    if (!localStorage.getItem('chamCongData')) {
-      saveData('chamCongData', []);
-    }
   }
 
   // ========================================
@@ -569,36 +562,6 @@
     });
   }
 
-  /**
-   * Xử lý form chấm công
-   */
-  function handleChamCongForm() {
-    const form = document.getElementById('cham-cong-form');
-    if (!form) return;
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(form);
-      const data = {
-        id: Date.now(),
-        employeeId: parseInt(formData.get('employeeId')),
-        attendanceDate: formData.get('attendanceDate'),
-        checkIn: formData.get('checkIn'),
-        checkOut: formData.get('checkOut') || '',
-        note: formData.get('note') || ''
-      };
-
-      const chamCongData = getData('chamCongData');
-      chamCongData.push(data);
-      saveData('chamCongData', chamCongData);
-      
-      form.reset();
-      
-      // Hiển thị thông báo thành công
-      showNotification('Chấm công thành công!', 'success');
-    });
-  }
 
 
   // ========================================
@@ -973,30 +936,6 @@
     }
   };
 
-  /**
-   * Bật/tắt form chấm công
-   */
-  window.toggleAttendanceForm = function() {
-    const form = document.getElementById('cham-cong-form');
-    if (form) {
-      form.style.display = form.style.display === 'none' ? 'block' : 'none';
-      populateEmployeeDropdown();
-    }
-  };
-
-  /**
-   * Điền danh sách nhân viên đang làm việc vào dropdown
-   */
-  function populateEmployeeDropdown() {
-    const select = document.querySelector('select[name="employeeId"]');
-    if (!select) return;
-
-    const data = getData('nhanSuData');
-    const activeEmployees = data.filter(item => item.status === 'Đang làm');
-    
-    select.innerHTML = '<option value="">Chọn nhân viên</option>' + 
-      activeEmployees.map(emp => `<option value="${emp.id}">${emp.employeeCode} - ${emp.fullName}</option>`).join('');
-  }
 
   /**
    * Tính lương tổng cho nhân viên đang làm việc
@@ -1069,7 +1008,6 @@
     handleBanHangForm(); // Form bán hàng
     handleDuocPhamForm(); // Form dược phẩm
     handleNhanSuForm(); // Form nhân sự
-    handleChamCongForm(); // Form chấm công
     
     // Khởi tạo các hành động cho nút
     initButtonActions();
