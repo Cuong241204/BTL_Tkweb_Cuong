@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dữ liệu dược phẩm - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/validation.js"></script>
+  <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="title">Quản Lý Hiệu Thuốc</div>
+      </div>
+      <nav class="nav-links">
+        <a href="../index.html"><svg width="16" height="16"><use href="../assets/icons.svg#home"/></svg> Trang chủ</a>
+        <a href="kho.html"><svg width="16" height="16"><use href="../assets/icons.svg#warehouse"/></svg> Quản lý kho</a>
+        <a href="banhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#cart"/></svg> Bán hàng</a>
+        <a href="khachhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Khách hàng</a>
+        <a href="nhansu.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Nhân sự</a>
+        <a href="taichinh-baocao.html"><svg width="16" height="16"><use href="../assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
+        <a href="duocpham.html"><svg width="16" height="16"><use href="../assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
+          <svg width="16" height="16" id="theme-icon">
+            <use href="../assets/icons.svg#sun"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fadeUp" style="--img:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1600&auto=format&fit=crop'); margin:16px 0;">
+      <style>.hero[style]::before { background-image: var(--img); }</style>
+      <div class="hero-content">
+        <div class="hero-title">Dược phẩm</div>
+        <div class="hero-sub">Danh mục thuốc và hoạt chất</div>
+      </div>
+    </section>
+    <div class="page-header fadeUp">
+      <div>
+        <div class="page-title">Dữ liệu dược phẩm</div>
+        <div class="subtle">Quản lý danh mục thuốc và hoạt chất.</div>
+      </div>
+      <div class="actions">
+        <button class="btn">Thêm thuốc</button>
+        <button class="btn btn-primary">Nhập Excel</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+        <div>Danh mục thuốc</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="duocpham-search" class="input" placeholder="Tìm theo tên hoạt chất..." />
+        </div>
+      </div>
+      <div class="card-content">
+        <!-- Form thêm dược phẩm -->
+        <form id="duocpham-form" class="form-row" style="margin-bottom: 20px; padding: 16px; background: rgba(59,130,246,.05); border-radius: 12px; border: 1px solid rgba(59,130,246,.1);">
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Mã thuốc *</label>
+            <input type="text" name="code" class="input" placeholder="TH001" data-label="Mã thuốc" />
+          </div>
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Tên thương mại *</label>
+            <input type="text" name="name" class="input" placeholder="Tên thuốc" data-label="Tên thương mại" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Hoạt chất *</label>
+            <input type="text" name="ingredient" class="input" placeholder="Paracetamol" data-label="Hoạt chất" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Nhà sản xuất *</label>
+            <input type="text" name="manufacturer" class="input" placeholder="GSK" data-label="Nhà sản xuất" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Dạng bào chế</label>
+            <select name="form" class="select" data-label="Dạng bào chế">
+              <option value="">Chọn dạng</option>
+              <option value="viên nén">Viên nén</option>
+              <option value="viên nang">Viên nang</option>
+              <option value="siro">Siro</option>
+              <option value="kem">Kem</option>
+              <option value="thuốc tiêm">Thuốc tiêm</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Giá bán *</label>
+            <input type="number" name="price" class="input" placeholder="1200" step="0.01" min="0" data-label="Giá bán" />
+          </div>
+          <div class="field" style="grid-column: span 12; display: flex; gap: 10px; margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Thêm thuốc</button>
+            <button type="reset" class="btn">Làm mới</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-content">
+        <div id="duocpham-table" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Tên thương mại</th>
+                <th>Hoạt chất</th>
+                <th>Dạng bào chế</th>
+                <th>Hãng SX</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>DP001</td>
+                <td>Panadol</td>
+                <td>Paracetamol</td>
+                <td>Viên nén</td>
+                <td>GSK</td>
+                <td><button class="btn btn-ghost" onclick="deleteDuocPhamItem(1)">Xóa</button></td>
+              </tr>
+              <tr>
+                <td>DP002</td>
+                <td>Augmentin</td>
+                <td>Amoxicillin/Clavulanate</td>
+                <td>Viên nén</td>
+                <td>GSK</td>
+                <td><button class="btn btn-ghost" onclick="deleteDuocPhamItem(2)">Xóa</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 QLy Hiệu Thuốc</div>
+  </main>
+</body>
+</html>
+
+

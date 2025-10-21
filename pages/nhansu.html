@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nhân sự - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/validation.js"></script>
+  <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="title">Quản Lý Hiệu Thuốc</div>
+      </div>
+      <nav class="nav-links">
+        <a href="../index.html"><svg width="16" height="16"><use href="../assets/icons.svg#home"/></svg> Trang chủ</a>
+        <a href="kho.html"><svg width="16" height="16"><use href="../assets/icons.svg#warehouse"/></svg> Quản lý kho</a>
+        <a href="banhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#cart"/></svg> Bán hàng</a>
+        <a href="khachhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Khách hàng</a>
+        <a href="nhansu.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Nhân sự</a>
+        <a href="taichinh-baocao.html"><svg width="16" height="16"><use href="../assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
+        <a href="duocpham.html"><svg width="16" height="16"><use href="../assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
+          <svg width="16" height="16" id="theme-icon">
+            <use href="../assets/icons.svg#sun"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fadeUp" style="--img:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1600&auto=format&fit=crop'); margin:16px 0;">
+      <style>.hero[style]::before { background-image: var(--img); }</style>
+      <div class="hero-content">
+        <div class="hero-title">Quản lý nhân sự</div>
+        <div class="hero-sub">Quản lý thông tin nhân viên, chấm công và lương</div>
+      </div>
+    </section>
+
+    <!-- Thống kê tổng quan -->
+    <section class="card fadeUp">
+      <div class="card-header">
+        <div>Thống kê nhân sự</div>
+      </div>
+      <div class="card-content">
+        <div class="grid">
+          <div class="card kpi" style="grid-column: span 3;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Tổng nhân viên</div>
+              <div class="kpi-value" id="total-employees">0</div>
+            </div>
+          </div>
+          <div class="card kpi" style="grid-column: span 3;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Đang làm việc</div>
+              <div class="kpi-value" id="active-employees">0</div>
+            </div>
+          </div>
+          <div class="card kpi" style="grid-column: span 3;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Nghỉ phép hôm nay</div>
+              <div class="kpi-value" id="on-leave">0</div>
+            </div>
+          </div>
+          <div class="card kpi" style="grid-column: span 3;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Lương tháng này</div>
+              <div class="kpi-value" id="monthly-salary">0₫</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form thêm nhân viên -->
+    <section class="card">
+      <div class="card-header">
+        <div>Thông tin nhân viên</div>
+        <div class="actions">
+          <button class="btn" onclick="scrollToEmployeeForm()">Thêm nhân viên</button>
+          <button class="btn btn-primary" onclick="exportEmployeeData()">Xuất dữ liệu</button>
+        </div>
+      </div>
+      <div class="card-content">
+        <form id="nhan-su-form" class="form-row" style="margin-bottom: 20px; padding: 16px; background: rgba(59,130,246,.05); border-radius: 12px; border: 1px solid rgba(59,130,246,.1);">
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Họ tên *</label>
+            <input type="text" name="fullName" class="input" placeholder="Nhập họ tên đầy đủ" data-label="Họ tên" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Mã nhân viên *</label>
+            <input type="text" name="employeeCode" class="input" placeholder="NV001" data-label="Mã nhân viên" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Số điện thoại *</label>
+            <input type="tel" name="phone" class="input" placeholder="0901234567" data-label="Số điện thoại" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Email</label>
+            <input type="email" name="email" class="input" placeholder="email@example.com" data-label="Email" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Ngày sinh *</label>
+            <input type="date" name="birthDate" class="input" data-label="Ngày sinh" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Giới tính *</label>
+            <select name="gender" class="input" data-label="Giới tính">
+              <option value="">Chọn giới tính</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Chức vụ *</label>
+            <select name="position" class="input" data-label="Chức vụ">
+              <option value="">Chọn chức vụ</option>
+              <option value="Dược sĩ">Dược sĩ</option>
+              <option value="Quản lý">Quản lý</option>
+              <option value="Kế toán">Kế toán</option>
+              <option value="Bảo vệ">Bảo vệ</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Lương cơ bản *</label>
+            <input type="number" name="baseSalary" class="input" placeholder="5000000" data-label="Lương cơ bản" />
+          </div>
+          <div class="field" style="grid-column: span 6;">
+            <label class="label">Địa chỉ</label>
+            <input type="text" name="address" class="input" placeholder="Địa chỉ thường trú" data-label="Địa chỉ" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Ngày bắt đầu làm việc *</label>
+            <input type="date" name="startDate" class="input" data-label="Ngày bắt đầu" />
+          </div>
+          <div class="field" style="grid-column: span 3;">
+            <label class="label">Trạng thái</label>
+            <select name="status" class="input" data-label="Trạng thái">
+              <option value="Đang làm">Đang làm</option>
+              <option value="Tạm nghỉ">Tạm nghỉ</option>
+              <option value="Nghỉ việc">Nghỉ việc</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: span 12; display: flex; gap: 10px; margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
+            <button type="reset" class="btn">Làm mới</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Danh sách nhân viên -->
+    <section class="card">
+      <div class="card-header">
+        <div>Danh sách nhân viên</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="nhan-su-search" class="input" placeholder="Tìm theo tên, mã, chức vụ..." />
+          <select id="nhan-su-status-filter" class="input" style="width: 150px;">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Đang làm">Đang làm</option>
+            <option value="Tạm nghỉ">Tạm nghỉ</option>
+            <option value="Nghỉ việc">Nghỉ việc</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-content">
+        <div id="nhan-su-table" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã NV</th>
+                <th>Họ tên</th>
+                <th>Chức vụ</th>
+                <th>SĐT</th>
+                <th>Lương cơ bản</th>
+                <th>Trạng thái</th>
+                <th>Ngày bắt đầu</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dữ liệu sẽ được load từ JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quản lý chấm công -->
+    <section class="card">
+      <div class="card-header">
+        <div>Chấm công</div>
+        <div class="actions">
+          <button class="btn" onclick="toggleAttendanceForm()">Chấm công</button>
+          <button class="btn btn-primary" onclick="viewAttendanceReport()">Báo cáo chấm công</button>
+        </div>
+      </div>
+      <div class="card-content">
+        <form id="cham-cong-form" class="form-row" style="margin-bottom: 20px; padding: 16px; background: rgba(34,197,94,.05); border-radius: 12px; border: 1px solid rgba(34,197,94,.1); display: none;">
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Nhân viên *</label>
+            <select name="employeeId" class="input" data-label="Nhân viên">
+              <option value="">Chọn nhân viên</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Ngày *</label>
+            <input type="date" name="attendanceDate" class="input" data-label="Ngày" />
+          </div>
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Giờ vào *</label>
+            <input type="time" name="checkIn" class="input" data-label="Giờ vào" />
+          </div>
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Giờ ra</label>
+            <input type="time" name="checkOut" class="input" data-label="Giờ ra" />
+          </div>
+          <div class="field" style="grid-column: span 4;">
+            <label class="label">Ghi chú</label>
+            <input type="text" name="note" class="input" placeholder="Ghi chú (nếu có)" data-label="Ghi chú" />
+          </div>
+          <div class="field" style="grid-column: span 12; display: flex; gap: 10px; margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Lưu chấm công</button>
+            <button type="reset" class="btn">Làm mới</button>
+            <button type="button" class="btn" onclick="toggleAttendanceForm()">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Quản lý lương -->
+    <section class="card">
+      <div class="card-header">
+        <div>Tính lương</div>
+        <div class="actions">
+          <button class="btn" onclick="calculateSalary()">Tính lương tháng</button>
+          <button class="btn btn-primary" onclick="exportSalaryReport()">Xuất bảng lương</button>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="grid">
+          <div class="card kpi" style="grid-column: span 4;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Tổng lương tháng này</div>
+              <div class="kpi-value" id="total-salary">0₫</div>
+            </div>
+          </div>
+          <div class="card kpi" style="grid-column: span 4;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Số ngày làm việc TB</div>
+              <div class="kpi-value" id="avg-work-days">0</div>
+            </div>
+          </div>
+          <div class="card kpi" style="grid-column: span 4;">
+            <div class="kpi-icon"><svg width="18" height="18"><use href="../assets/icons.svg#users"/></svg></div>
+            <div>
+              <div class="subtle">Số giờ làm việc TB</div>
+              <div class="kpi-value" id="avg-work-hours">0h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 QLy Hiệu Thuốc</div>
+  </main>
+</body>
+</html>

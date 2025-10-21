@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tài chính & Báo cáo - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="title">Quản Lý Hiệu Thuốc</div>
+      </div>
+      <nav class="nav-links">
+        <a href="../index.html"><svg width="16" height="16"><use href="../assets/icons.svg#home"/></svg> Trang chủ</a>
+        <a href="kho.html"><svg width="16" height="16"><use href="../assets/icons.svg#warehouse"/></svg> Quản lý kho</a>
+        <a href="banhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#cart"/></svg> Bán hàng</a>
+        <a href="khachhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Khách hàng</a>
+        <a href="nhansu.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Nhân sự</a>
+        <a href="taichinh-baocao.html"><svg width="16" height="16"><use href="../assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
+        <a href="duocpham.html"><svg width="16" height="16"><use href="../assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
+          <svg width="16" height="16" id="theme-icon">
+            <use href="../assets/icons.svg#sun"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fadeUp" style="--img:url('https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=1600&auto=format&fit=crop'); margin:16px 0;">
+      <style>.hero[style]::before { background-image: var(--img); }</style>
+      <div class="hero-content">
+        <div class="hero-title">Tài chính & Báo cáo</div>
+        <div class="hero-sub">Phân tích số liệu dễ hiểu</div>
+      </div>
+    </section>
+    <div class="page-header fadeUp">
+      <div>
+        <div class="page-title">Tài chính & Báo cáo</div>
+        <div class="subtle">Phân tích doanh thu, lợi nhuận theo thời gian.</div>
+      </div>
+      <div class="actions">
+        <button class="btn">Xuất PDF</button>
+        <button class="btn btn-primary">Tạo báo cáo</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+        <div>Báo cáo doanh thu</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="select">
+            <option>Hôm nay</option>
+            <option>7 ngày</option>
+            <option>30 ngày</option>
+            <option>Tùy chỉnh</option>
+          </select>
+          <input id="taichinh-search" class="input" placeholder="Lọc theo nội dung..." />
+        </div>
+      </div>
+      <div class="card-content">
+        <div id="taichinh-table" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ngày</th>
+                <th>Hóa đơn</th>
+                <th>Doanh thu</th>
+                <th>Lợi nhuận</th>
+                <th>Ghi chú</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>20/10/2025</td>
+                <td>128</td>
+                <td>42.350.000₫</td>
+                <td>9.520.000₫</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>19/10/2025</td>
+                <td>118</td>
+                <td>39.800.000₫</td>
+                <td>8.920.000₫</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 QLy Hiệu Thuốc</div>
+  </main>
+</body>
+</html>
+
+

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý kho - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/validation.js"></script>
+  <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="title">Quản Lý Hiệu Thuốc</div>
+      </div>
+      <nav class="nav-links">
+        <a href="../index.html"><svg width="16" height="16"><use href="../assets/icons.svg#home"/></svg> Trang chủ</a>
+        <a href="kho.html"><svg width="16" height="16"><use href="../assets/icons.svg#warehouse"/></svg> Quản lý kho</a>
+        <a href="banhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#cart"/></svg> Bán hàng</a>
+        <a href="khachhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Khách hàng</a>
+        <a href="nhansu.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Nhân sự</a>
+        <a href="taichinh-baocao.html"><svg width="16" height="16"><use href="../assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
+        <a href="duocpham.html"><svg width="16" height="16"><use href="../assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
+          <svg width="16" height="16" id="theme-icon">
+            <use href="../assets/icons.svg#sun"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fadeUp" style="--img:url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600&auto=format&fit=crop'); margin:16px 0;">
+      <style>.hero[style]::before { background-image: var(--img); }</style>
+      <div class="hero-content">
+        <div class="hero-title">Kho hàng</div>
+        <div class="hero-sub">Theo dõi tồn kho, hạn dùng và lô hàng</div>
+      </div>
+    </section>
+    <div class="page-header fadeUp">
+      <div>
+        <div class="page-title">Quản lý kho</div>
+        <div class="subtle">Theo dõi tồn kho, hạn dùng và lô hàng.</div>
+      </div>
+      <div class="actions">
+        <button class="btn">Nhập hàng</button>
+        <button class="btn btn-primary">Tạo phiếu nhập</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+        <div>Danh sách tồn kho</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="kho-search" class="input" placeholder="Tìm kiếm theo tên, mã, lô..." />
+          <button class="btn">Xuất CSV</button>
+        </div>
+      </div>
+      <div class="card-content">
+        <!-- Form nhập hàng -->
+        <form id="kho-form" class="form-row" style="margin-bottom: 20px; padding: 16px; background: rgba(59,130,246,.05); border-radius: 12px; border: 1px solid rgba(59,130,246,.1);">
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Mã thuốc *</label>
+            <input type="text" name="drugCode" class="input" placeholder="TH001" data-label="Mã thuốc" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Số lượng *</label>
+            <input type="number" name="quantity" class="input" placeholder="100" min="1" max="9999" data-label="Số lượng" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Hạn sử dụng *</label>
+            <input type="date" name="expiryDate" class="input" data-label="Hạn sử dụng" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Số lô *</label>
+            <input type="text" name="batchNumber" class="input" placeholder="PA202510" data-label="Số lô" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Giá nhập *</label>
+            <input type="number" name="importPrice" class="input" placeholder="850" step="0.01" min="0" data-label="Giá nhập" />
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="label">Giá bán *</label>
+            <input type="number" name="sellingPrice" class="input" placeholder="1200" step="0.01" min="0" data-label="Giá bán" />
+          </div>
+          <div class="field" style="grid-column: span 12; display: flex; gap: 10px; margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Nhập hàng</button>
+            <button type="reset" class="btn">Làm mới</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-content">
+        <div id="kho-table" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Tên thuốc</th>
+                <th>Hạn dùng</th>
+                <th>Lô</th>
+                <th>Tồn</th>
+                <th>Giá nhập</th>
+                <th>Giá bán</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TH001</td>
+                <td>Paracetamol 500mg</td>
+                <td>12/2026</td>
+                <td>PA202510</td>
+                <td>240</td>
+                <td>850₫</td>
+                <td>1.200₫</td>
+                <td><span class="badge success">Còn hàng</span></td>
+                <td><button class="btn btn-ghost" onclick="deleteKhoItem(1)">Xóa</button></td>
+              </tr>
+              <tr>
+                <td>TH002</td>
+                <td>Amoxicillin 500mg</td>
+                <td>03/2026</td>
+                <td>AMX0326</td>
+                <td>52</td>
+                <td>2.100₫</td>
+                <td>3.000₫</td>
+                <td><span class="badge warn">Sắp hết</span></td>
+                <td><button class="btn btn-ghost" onclick="deleteKhoItem(2)">Xóa</button></td>
+              </tr>
+              <tr>
+                <td>TH003</td>
+                <td>Vitamin C 1000mg</td>
+                <td>08/2027</td>
+                <td>VC1027</td>
+                <td>480</td>
+                <td>1.900₫</td>
+                <td>2.700₫</td>
+                <td><span class="badge success">Còn hàng</span></td>
+                <td><button class="btn btn-ghost" onclick="deleteKhoItem(3)">Xóa</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 QLy Hiệu Thuốc</div>
+  </main>
+</body>
+</html>
+
+

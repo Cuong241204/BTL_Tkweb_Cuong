@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bán hàng - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/validation.js"></script>
+  <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="title">Quản Lý Hiệu Thuốc</div>
+      </div>
+      <nav class="nav-links">
+        <a href="../index.html"><svg width="16" height="16"><use href="../assets/icons.svg#home"/></svg> Trang chủ</a>
+        <a href="kho.html"><svg width="16" height="16"><use href="../assets/icons.svg#warehouse"/></svg> Quản lý kho</a>
+        <a href="banhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#cart"/></svg> Bán hàng</a>
+        <a href="khachhang.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Khách hàng</a>
+        <a href="nhansu.html"><svg width="16" height="16"><use href="../assets/icons.svg#users"/></svg> Nhân sự</a>
+        <a href="taichinh-baocao.html"><svg width="16" height="16"><use href="../assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
+        <a href="duocpham.html"><svg width="16" height="16"><use href="../assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
+          <svg width="16" height="16" id="theme-icon">
+            <use href="../assets/icons.svg#sun"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fadeUp" style="margin:16px 0; position: relative;">
+      <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1600&auto=format&fit=crop" alt="Hiệu thuốc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+      <div class="hero-content">
+        <div class="hero-title">Bán hàng nhanh chóng</div>
+        <div class="hero-sub">Tạo đơn, thanh toán và in hóa đơn ngay</div>
+      </div>
+    </section>
+    <div class="page-header fadeUp">
+      <div>
+        <div class="page-title">Bán hàng</div>
+        <div class="subtle">Tạo hóa đơn và xử lý thanh toán nhanh chóng.</div>
+      </div>
+      <div class="actions">
+        <button class="btn"><i class="fas fa-qrcode" style="margin-right:8px;"></i>Quét mã</button>
+        <button class="btn btn-primary"><i class="fas fa-plus" style="margin-right:8px;"></i>Tạo hóa đơn</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+        <div>Giỏ hàng</div>
+        <form id="banhang-form" style="display:flex;gap:8px;align-items:center;">
+          <input id="banhang-search" name="search" class="input" placeholder="Tìm thuốc theo tên hoặc mã..." data-label="Tìm kiếm" />
+          <input type="number" name="quantity" class="input" placeholder="Số lượng" style="width: 100px;" data-label="Số lượng" min="1" max="999" />
+          <input type="number" name="price" class="input" placeholder="Đơn giá" style="width: 120px;" data-label="Đơn giá" step="0.01" min="0" />
+          <button type="submit" class="btn"><i class="fas fa-plus" style="margin-right:6px;"></i>Thêm</button>
+        </form>
+      </div>
+      <div class="card-content">
+        <div id="banhang-table" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>SL</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TH001</td>
+                <td>Paracetamol 500mg</td>
+                <td>2</td>
+                <td>1.200₫</td>
+                <td>2.400₫</td>
+                <td><button class="btn btn-ghost" onclick="deleteBanHangItem(1)"><i class="fas fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>TH002</td>
+                <td>Vitamin C 1000mg</td>
+                <td>1</td>
+                <td>3.500₫</td>
+                <td>3.500₫</td>
+                <td><button class="btn btn-ghost" onclick="deleteBanHangItem(2)"><i class="fas fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>TH003</td>
+                <td>Aspirin 81mg</td>
+                <td>3</td>
+                <td>800₫</td>
+                <td>2.400₫</td>
+                <td><button class="btn btn-ghost" onclick="deleteBanHangItem(3)"><i class="fas fa-trash"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px;gap:10px;">
+          <div class="card" style="padding:12px;min-width:260px;">
+            <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;color:var(--muted);"><span>Tạm tính</span><span>8.300₫</span></div>
+            <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;color:var(--muted);"><span>Giảm giá</span><span>0₫</span></div>
+            <div style="display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:18px;"><span>Thanh toán</span><span>8.300₫</span></div>
+            <div style="display:flex;gap:10px;margin-top:10px;">
+              <button class="btn"><i class="fas fa-pause" style="margin-right:6px;"></i>Tạm giữ</button>
+              <button class="btn btn-primary"><i class="fas fa-credit-card" style="margin-right:6px;"></i>Thanh toán</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 QLy Hiệu Thuốc</div>
+  </main>
+</body>
+</html>
