@@ -331,8 +331,8 @@
     // Khởi tạo dữ liệu nhân sự
     if (!localStorage.getItem('nhanSuData')) {
       const nhanSuData = [
-        { id: 1, employeeCode: 'NV001', fullName: 'Đinh Thị Vân', phone: '0901234567', email: 'dtv@example.com', birthDate: '1985-03-15', gender: 'Nữ', position: 'Dược sĩ', baseSalary: 12000000, address: 'Hà Nội', startDate: '2019-01-01', status: 'Đang làm' },
-        { id: 2, employeeCode: 'NV002', fullName: 'Phạm Văn Được', phone: '0902345678', email: 'pvd@example.com', birthDate: '1988-07-20', gender: 'Nam', position: 'Thu ngân', baseSalary: 8000000, address: 'TP.HCM', startDate: '2020-06-01', status: 'Tạm nghỉ' }
+        { id: 1, employeeCode: 'NV001', fullName: 'Đinh Thị Vân', phone: '0901234567', email: 'van@example.com', birthDate: '1985-03-15', gender: 'Nữ', position: 'Dược sĩ', baseSalary: 12000000, address: 'Hà Nội', startDate: '2020-01-01', status: 'Đang làm' },
+        { id: 2, employeeCode: 'NV002', fullName: 'Phạm Văn Được', phone: '0902345678', email: 'duoc@example.com', birthDate: '1988-07-20', gender: 'Nam', position: 'Thu ngân', baseSalary: 8000000, address: 'TP.HCM', startDate: '2021-03-15', status: 'Tạm nghỉ' }
       ];
       saveData('nhanSuData', nhanSuData);
       console.log('Đã khởi tạo dữ liệu nhân sự mẫu');
@@ -708,21 +708,32 @@
   function updateNhanSuTable() {
     // Tìm bảng danh sách nhân viên
     const table = document.querySelector('#nhan-su-table tbody');
-    if (!table) return;
+    if (!table) {
+      console.log('Không tìm thấy bảng nhân sự');
+      return;
+    }
 
     // Lấy dữ liệu nhân sự từ localStorage
     const data = getData('nhanSuData');
+    console.log('Dữ liệu nhân sự:', data);
+    
+    // Kiểm tra nếu không có dữ liệu
+    if (!data || data.length === 0) {
+      console.log('Không có dữ liệu nhân sự');
+      table.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Chưa có dữ liệu nhân viên</td></tr>';
+      return;
+    }
     
     // Tạo HTML cho từng dòng trong bảng
     table.innerHTML = data.map(item => `
       <tr>
-        <td>${item.employeeCode}</td> <!-- Mã nhân viên -->
-        <td>${item.fullName}</td> <!-- Họ tên -->
-        <td>${item.position}</td> <!-- Chức vụ -->
-        <td>${item.phone}</td> <!-- Số điện thoại -->
-        <td>${item.baseSalary.toLocaleString()}₫</td> <!-- Lương cơ bản (định dạng số) -->
-        <td><span class="badge ${getStatusClass(item.status)}">${item.status}</span></td> <!-- Trạng thái với màu sắc -->
-        <td>${new Date(item.startDate).toLocaleDateString('vi-VN')}</td> <!-- Ngày bắt đầu (định dạng VN) -->
+        <td>${item.employeeCode || 'N/A'}</td> <!-- Mã nhân viên -->
+        <td>${item.fullName || 'N/A'}</td> <!-- Họ tên -->
+        <td>${item.position || 'N/A'}</td> <!-- Chức vụ -->
+        <td>${item.phone || 'N/A'}</td> <!-- Số điện thoại -->
+        <td>${item.baseSalary ? item.baseSalary.toLocaleString() + '₫' : 'N/A'}</td> <!-- Lương cơ bản (định dạng số) -->
+        <td><span class="badge ${getStatusClass(item.status)}">${item.status || 'N/A'}</span></td> <!-- Trạng thái với màu sắc -->
+        <td>${item.startDate ? new Date(item.startDate).toLocaleDateString('vi-VN') : 'N/A'}</td> <!-- Ngày bắt đầu (định dạng VN) -->
         <td>
           <button class="btn btn-ghost" onclick="deleteNhanSuItem(${item.id})">Xóa</button> <!-- Nút xóa -->
         </td>
@@ -1046,6 +1057,9 @@
    * Khởi tạo tất cả các chức năng của ứng dụng
    */
   function initApp() {
+    // Xóa dữ liệu cũ nếu có (để test dữ liệu mới)
+    localStorage.removeItem('nhanSuData'); // Xóa dữ liệu cũ để test dữ liệu mới
+    
     // Khởi tạo dữ liệu mẫu nếu chưa có
     initSampleData();
     

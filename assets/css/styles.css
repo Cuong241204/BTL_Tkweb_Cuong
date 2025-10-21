@@ -403,6 +403,46 @@ tbody tr:selected { background: rgba(59,130,246,.08); }
   border-color: rgba(59,130,246,.4);
 }
 
+/* CSS chi tiết cho select dropdown */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+/* Styling cho option trong select */
+select option {
+  background-color: var(--panel);
+  color: var(--text);
+  padding: 8px 12px;
+  border: none;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Hover effect cho option */
+select option:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Focus state cho option */
+select option:focus {
+  background-color: var(--primary);
+  color: white;
+  outline: none;
+}
+
+/* Selected option */
+select option:checked {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 500;
+}
+
+
 /* Badges */
 .badge { 
   display: inline-flex; 
@@ -488,6 +528,36 @@ tbody tr:selected { background: rgba(59,130,246,.08); }
 .validated-form .select.success:focus {
   border-color: var(--success);
   box-shadow: 0 0 0 3px rgba(16,185,129,.3);
+}
+
+/* CSS cho select trong các trạng thái khác nhau */
+.validated-form .select.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,.2);
+  background: linear-gradient(180deg, rgba(239,68,68,.1), rgba(220,38,38,.05));
+}
+
+.validated-form .select.success {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(16,185,129,.2);
+  background: linear-gradient(180deg, rgba(16,185,129,.05), rgba(5,150,105,.02));
+}
+
+/* Styling cho select khi có placeholder */
+select:invalid {
+  color: var(--muted);
+}
+
+select:valid {
+  color: var(--text);
+}
+
+/* Responsive cho select */
+@media (max-width: 768px) {
+  select {
+    font-size: 16px; /* Ngăn zoom trên mobile */
+    padding: 14px 16px;
+  }
 }
 
 /* Form validation summary */
