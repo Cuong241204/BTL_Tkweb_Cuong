@@ -305,8 +305,9 @@
     // Khởi tạo dữ liệu khách hàng
     if (!localStorage.getItem('khachHangData')) {
       const khachHangData = [
-        { id: 1, code: 'KH001', name: 'Nguyễn Văn A', phone: '0901 234 567', email: '', address: '', rank: 'VIP', totalSpent: 12400000, lastPurchase: '19/10/2025' },
-        { id: 2, code: 'KH002', name: 'Trần Thị B', phone: '0902 222 333', email: '', address: '', rank: 'Thường', totalSpent: 1250000, lastPurchase: '17/10/2025' }
+        { id: 1, code: 'KH001', name: 'Nguyễn Văn Anh', phone: '0901 234 567', email: '', address: '', rank: 'VIP', totalSpent: 12400000, lastPurchase: '19/10/2025' },
+        { id: 2, code: 'KH002', name: 'Nguyễn Thúy Hiền', phone: '0902 222 333', email: '', address: '', rank: 'Thường', totalSpent: 1250000, lastPurchase: '17/10/2025' },
+        { id: 3, code: 'KH003', name: 'Đỗ Lan Hương', phone: '0902 222 456', email: '', address: '', rank: 'Thường', totalSpent: 5000000, lastPurchase: '15/10/2025' }
       ];
       saveData('khachHangData', khachHangData);
     }
@@ -319,8 +320,9 @@
     // Khởi tạo dữ liệu dược phẩm
     if (!localStorage.getItem('duocPhamData')) {
       const duocPhamData = [
-        { id: 1, code: 'DP001', name: 'Panadol', ingredient: 'Paracetamol', form: 'Viên nén', manufacturer: 'GSK', price: 1200 },
-        { id: 2, code: 'DP002', name: 'Augmentin', ingredient: 'Amoxicillin/Clavulanate', form: 'Viên nén', manufacturer: 'GSK', price: 3000 }
+        { id: 1, code: 'DP001', name: 'Panadol', ingredient: 'Paracetamol', form: 'Viên nén', manufacturer: 'GSK', price: 120000 },
+        { id: 2, code: 'DP002', name: 'Augmentin', ingredient: 'Amoxicillin/Clavulanate', form: 'Viên nén', manufacturer: 'GSK', price: 300000 },
+        { id: 3, code: 'DP003', name: 'Bổ phế', ingredient: 'BBC', form: 'Siro', manufacturer: 'GSK', price: 270000 }
       ];
       saveData('duocPhamData', duocPhamData);
     }
@@ -329,7 +331,8 @@
     if (!localStorage.getItem('nhanSuData')) {
       const nhanSuData = [
         { id: 1, employeeCode: 'NV001', fullName: 'Đinh Thị Vân', phone: '0901234567', email: 'van@example.com', birthDate: '1985-03-15', gender: 'Nữ', position: 'Dược sĩ', baseSalary: 12000000, address: 'Hà Nội', startDate: '2020-01-01', status: 'Đang làm' },
-        { id: 2, employeeCode: 'NV002', fullName: 'Phạm Văn Được', phone: '0902345678', email: 'duoc@example.com', birthDate: '1988-07-20', gender: 'Nam', position: 'Thu ngân', baseSalary: 8000000, address: 'TP.HCM', startDate: '2021-03-15', status: 'Tạm nghỉ' }
+        { id: 2, employeeCode: 'NV002', fullName: 'Phạm Văn Được', phone: '0902345678', email: 'duoc@example.com', birthDate: '1988-07-20', gender: 'Nam', position: 'Thu ngân', baseSalary: 8000000, address: 'TP.HCM', startDate: '2021-03-15', status: 'Tạm nghỉ' },
+        { id: 3, employeeCode: 'NV003', fullName: 'Lại Bá Đức', phone: '0372869968', email: 'duc1@example.com', birthDate: '2001-02-18', gender: 'Nam', position: 'Thu ngân', baseSalary: 10000000, address: 'Phú Thọ', startDate: '2021-03-15', status: 'Nghỉ việc' }
       ];
       saveData('nhanSuData', nhanSuData);
       console.log('Đã khởi tạo dữ liệu nhân sự mẫu');
