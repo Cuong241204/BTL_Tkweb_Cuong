@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng nhập - QLy Hiệu Thuốc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="preload" href="../assets/icons.svg" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script defer src="../assets/js/main.js"></script>
+  <script defer src="../assets/js/auth.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-icon">
+          <i class="fas fa-pills"></i>
+        </div>
+        <div class="login-title">Đăng nhập hệ thống</div>
+        <div class="login-subtitle">Quản lý hiệu thuốc</div>
+      </div>
+      
+      <form id="login-form" class="login-form">
+        <div class="field">
+          <label class="label">Tên đăng nhập</label>
+          <div class="input-group">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" name="username" class="input" placeholder="Nhập tên đăng nhập" required />
+          </div>
+        </div>
+        
+        <div class="field">
+          <label class="label">Mật khẩu</label>
+          <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" name="password" class="input" placeholder="Nhập mật khẩu" required />
+          </div>
+        </div>
+        
+        <div class="field">
+          <label class="checkbox-label">
+            <input type="checkbox" name="remember" />
+            <span class="checkmark"></span>
+            Ghi nhớ đăng nhập
+          </label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary login-btn">
+          <i class="fas fa-sign-in-alt"></i>
+          Đăng nhập
+        </button>
+      </form>
+      
+      <div class="login-footer">
+        <div class="demo-info">
+          <i class="fas fa-info-circle"></i>
+          <span>Tài khoản demo: <strong>admin</strong> / <strong>123</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

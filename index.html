@@ -11,6 +11,7 @@
   <link rel="preload" href="assets/icons.svg" as="image">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/J+5d0t7abK41JStQIAqVgRVzPbzo5smXKp4YfRvH+8abtTE1Pi6jizoUq5GqYl5Y7MZy0Z1NQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/auth.js"></script>
 </head>
 <body>
   <header class="navbar">
@@ -27,6 +28,15 @@
         <a href="pages/nhansu.html"><svg width="16" height="16"><use href="assets/icons.svg#users"/></svg> Nhân sự</a>
         <a href="pages/taichinh-baocao.html"><svg width="16" height="16"><use href="assets/icons.svg#report"/></svg> Tài chính & Báo cáo</a>
         <a href="pages/duocpham.html"><svg width="16" height="16"><use href="assets/icons.svg#pill"/></svg> Dữ liệu dược phẩm</a>
+        <div class="user-info" id="user-info" style="display: none;">
+          <i class="fas fa-user"></i>
+          <span class="username"></span>
+          <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+        </div>
+        <a href="pages/login.html" id="login-btn" class="btn btn-primary" style="display: none;">
+          <i class="fas fa-sign-in-alt"></i>
+          Đăng nhập
+        </a>
         <button id="theme-toggle" class="btn btn-ghost" title="Chuyển đổi giao diện">
           <svg width="16" height="16" id="theme-icon">
             <use href="assets/icons.svg#sun"/>
