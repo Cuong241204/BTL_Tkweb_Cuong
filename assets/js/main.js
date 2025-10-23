@@ -346,11 +346,24 @@
    */
   function handleKhoForm() {
     const form = document.getElementById('kho-form');
-    if (!form) return;
+    if (!form) {
+      console.log('Không tìm thấy form kho');
+      return;
+    }
+
+    console.log('Đã tìm thấy form kho, đang thiết lập event listener...');
 
     form.addEventListener('submit', function(e) {
       // Ngăn chặn hành vi submit mặc định của form
       e.preventDefault();
+      console.log('Form kho được submit');
+      
+      // Kiểm tra validation trước khi xử lý dữ liệu
+      const validator = window.khoValidator;
+      if (validator && !validator.validate()) {
+        console.log('Validation failed');
+        return;
+      }
       
       // Lấy dữ liệu từ form
       const formData = new FormData(form);
@@ -368,10 +381,14 @@
         status: 'Còn hàng' // Trạng thái mặc định
       };
 
+      console.log('Dữ liệu kho mới:', data);
+
       // Lấy dữ liệu kho hiện tại và thêm dữ liệu mới
       const khoData = getData('khoData');
       khoData.push(data);
       saveData('khoData', khoData);
+      
+      console.log('Đã lưu dữ liệu, đang cập nhật bảng...');
       
       // Cập nhật bảng hiển thị
       updateKhoTable();
@@ -573,24 +590,41 @@
    */
   function updateKhoTable() {
     const table = document.querySelector('#kho-table tbody');
-    if (!table) return;
+    if (!table) {
+      console.log('Không tìm thấy bảng kho');
+      return;
+    }
 
     const data = getData('khoData');
-    table.innerHTML = data.map(item => `
-      <tr>
-        <td>${item.code}</td>
-        <td>${item.name}</td>
-        <td>${item.expiry}</td>
-        <td>${item.batch}</td>
-        <td>${item.stock}</td>
-        <td>${item.importPrice.toLocaleString()}₫</td>
-        <td>${item.sellingPrice.toLocaleString()}₫</td>
-        <td><span class="badge ${item.status === 'Còn hàng' ? 'success' : 'warn'}">${item.status}</span></td>
-        <td>
-          <button class="btn btn-ghost" onclick="deleteKhoItem(${item.id})">Xóa</button>
-        </td>
-      </tr>
-    `).join('');
+    console.log('Dữ liệu kho:', data);
+    
+    // Kiểm tra nếu không có dữ liệu
+    if (!data || data.length === 0) {
+      console.log('Không có dữ liệu kho');
+      table.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px;">Chưa có dữ liệu kho hàng</td></tr>';
+      return;
+    }
+    
+    table.innerHTML = data.map(item => {
+      // Định dạng ngày hết hạn
+      const expiryDate = item.expiry ? new Date(item.expiry).toLocaleDateString('vi-VN') : 'N/A';
+      
+      return `
+        <tr>
+          <td>${item.code || 'N/A'}</td>
+          <td>${item.name || 'N/A'}</td>
+          <td>${expiryDate}</td>
+          <td>${item.batch || 'N/A'}</td>
+          <td>${item.stock || 0}</td>
+          <td>${item.importPrice ? item.importPrice.toLocaleString() + '₫' : 'N/A'}</td>
+          <td>${item.sellingPrice ? item.sellingPrice.toLocaleString() + '₫' : 'N/A'}</td>
+          <td><span class="badge ${item.status === 'Còn hàng' ? 'success' : 'warn'}">${item.status || 'N/A'}</span></td>
+          <td>
+            <button class="btn btn-ghost" onclick="deleteKhoItem(${item.id})">Xóa</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
   /**
@@ -742,6 +776,7 @@
     }
   };
 
+
   /**
    * Xóa khách hàng
    */
@@ -844,24 +879,8 @@
     notification.innerHTML = `
       <div class="notification-content">
         <span>${message}</span>
-        <button onclick="this.parentElement.parentElement.remove()" class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px;">×</button>
+        <button onclick="this.parentElement.parentElement.remove()" class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px; color: white; border: 1px solid rgba(255,255,255,0.3);">×</button>
       </div>
-    `;
-    
-    // Thiết lập CSS cho thông báo
-    notification.style.cssText = `
-      position: fixed; /* Cố định vị trí */
-      top: 20px; /* Cách top 20px */
-      right: 20px; /* Cách right 20px */
-      background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)'}; /* Màu nền theo loại */
-      color: white; /* Màu chữ trắng */
-      padding: 12px 16px; /* Khoảng cách bên trong */
-      border-radius: 8px; /* Bo góc */
-      box-shadow: 0 4px 12px rgba(0,0,0,.2); /* Đổ bóng */
-      z-index: 1000; /* Lớp hiển thị cao nhất */
-      animation: slideIn 0.3s ease; /* Hiệu ứng trượt vào */
-      max-width: 400px; /* Chiều rộng tối đa */
-      word-wrap: break-word; /* Xuống dòng khi cần */
     `;
     
     // Thêm thông báo vào body
@@ -870,7 +889,12 @@
     // Tự động xóa thông báo sau 4 giây
     setTimeout(() => {
       if (notification.parentElement) {
-        notification.remove();
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, 300);
       }
     }, 4000);
   }

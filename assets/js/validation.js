@@ -1,22 +1,27 @@
-// Validation system for QLy Hiệu Thuốc
 (function() {
   'use strict';
 
-  // Validation rules and messages
+  /**
+   * Đối tượng chứa các quy tắc validation và thông báo lỗi
+   */
   const ValidationRules = {
-    // Common patterns
+    /**
+     * Các pattern regex để kiểm tra định dạng dữ liệu
+     */
     patterns: {
-      phone: /^(0[3|5|7|8|9])+([0-9]{8})$/,
-      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      vietnameseName: /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÂÊÔưăâêô\s]+$/,
-      drugCode: /^[A-Z]{2}\d{3}$/,
-      employeeCode: /^NV\d{3}$/,
-      customerCode: /^KH\d{3}$/,
-      price: /^\d+(\.\d{1,2})?$/,
-      quantity: /^\d+$/
+      phone: /^(0[3|5|7|8|9])+([0-9]{8})$/, // Số điện thoại Việt Nam (10 số, bắt đầu bằng 0)
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Email hợp lệ
+      vietnameseName: /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÂÊÔưăâêô\s]+$/, // Tên tiếng Việt
+      drugCode: /^[A-Z]{2}\d{3}$/, // Mã thuốc: 2 chữ cái + 3 số (VD: TH001)
+      employeeCode: /^NV\d{3}$/, // Mã nhân viên: NV + 3 số (VD: NV001)
+      customerCode: /^KH\d{3}$/, // Mã khách hàng: KH + 3 số (VD: KH001)
+      price: /^\d+(\.\d{1,2})?$/, // Giá tiền: số nguyên hoặc số thập phân (tối đa 2 chữ số sau dấu phẩy)
+      quantity: /^\d+$/ // Số lượng: chỉ chấp nhận số nguyên dương
     },
 
-    // Error messages
+    /**
+     * Các thông báo lỗi validation
+     */
     messages: {
       required: 'Trường này là bắt buộc',
       phone: 'Số điện thoại không hợp lệ (VD: 0901234567)',
@@ -37,73 +42,93 @@
     }
   };
 
-  // Validation class
+  /**
+   * Lớp FormValidator - Lớp chính để xử lý validation cho các form
+   */
   class FormValidator {
+    /**
+     * Khởi tạo validator cho form
+     * @param {string} formId - ID của form cần validation
+     */
     constructor(formId) {
       this.form = document.getElementById(formId) || document.querySelector(formId);
-      this.errors = {};
-      this.rules = {};
+      this.errors = {}; // Lưu trữ các lỗi validation
+      this.rules = {}; // Lưu trữ các quy tắc validation cho từng field
       
       if (this.form) {
         this.init();
       }
     }
 
+    /**
+     * Khởi tạo các chức năng validation cho form
+     */
     init() {
-      // Add validation classes to form
+      // Thêm class CSS để đánh dấu form đã được validation
       this.form.classList.add('validated-form');
       
-      // Add real-time validation
+      // Thêm validation real-time (kiểm tra ngay khi người dùng nhập)
       this.addRealTimeValidation();
     }
 
-    // Add validation rule for a field
+    /**
+     * Thêm quy tắc validation cho một field
+     * @param {string} fieldName - Tên field cần validation
+     * @param {object} rules - Các quy tắc validation
+     */
     addRule(fieldName, rules) {
       this.rules[fieldName] = rules;
     }
 
-    // Validate single field
+    /**
+     * Kiểm tra validation cho một field cụ thể
+     * @param {string} fieldName - Tên field cần kiểm tra
+     * @param {string} value - Giá trị cần kiểm tra
+     * @returns {object} - Kết quả validation 
+     */
     validateField(fieldName, value) {
       const rules = this.rules[fieldName];
       if (!rules) return { valid: true };
 
       const errors = [];
 
-      // Required validation
+      // Kiểm tra trường bắt buộc
       if (rules.required && (!value || value.trim() === '')) {
         errors.push(ValidationRules.messages.required);
         return { valid: false, errors };
       }
 
-      // Skip other validations if field is empty and not required
+      // Bỏ qua các validation khác nếu field trống và không bắt buộc
       if (!value || value.trim() === '') {
         return { valid: true };
       }
 
-      // Pattern validation
+      // Kiểm tra pattern (regex)
       if (rules.pattern && !rules.pattern.test(value)) {
         errors.push(rules.message || 'Giá trị không hợp lệ');
       }
 
-      // Length validation
+      // Kiểm tra độ dài tối thiểu
       if (rules.minLength && value.length < rules.minLength) {
         errors.push(ValidationRules.messages.minLength(rules.minLength));
       }
 
+      // Kiểm tra độ dài tối đa
       if (rules.maxLength && value.length > rules.maxLength) {
         errors.push(ValidationRules.messages.maxLength(rules.maxLength));
       }
 
-      // Numeric validation
+      // Kiểm tra giá trị số tối thiểu
       if (rules.min !== undefined && !isNaN(parseFloat(value)) && parseFloat(value) < rules.min) {
         errors.push(ValidationRules.messages.min(rules.min));
       }
 
+      // Kiểm tra giá trị số tối đa
       if (rules.max !== undefined && !isNaN(parseFloat(value)) && parseFloat(value) > rules.max) {
         errors.push(ValidationRules.messages.max(rules.max));
       }
 
-      // Date validation
+      // Kiểm tra ngày tháng
       if (rules.date) {
         const date = new Date(value);
         if (isNaN(date.getTime())) {
@@ -118,11 +143,15 @@
       return { valid: errors.length === 0, errors };
     }
 
-    // Validate entire form
+    /**
+     * Kiểm tra validation cho toàn bộ form
+     * @returns {boolean} - true nếu form hợp lệ, false nếu có lỗi
+     */
     validate() {
       this.errors = {};
       let isValid = true;
 
+      // Duyệt qua tất cả các field có quy tắc validation
       Object.keys(this.rules).forEach(fieldName => {
         const field = this.form.querySelector(`[name="${fieldName}"]`);
         if (!field) return;
@@ -130,28 +159,35 @@
         const value = field.value;
         const result = this.validateField(fieldName, value);
         
+        // Nếu field không hợp lệ, lưu lỗi và đánh dấu form không hợp lệ
         if (!result.valid) {
           this.errors[fieldName] = result.errors;
           isValid = false;
         }
       });
 
+      // Hiển thị các lỗi validation
       this.displayErrors();
       return isValid;
     }
 
-    // Display validation errors
+    /**
+     * Hiển thị các lỗi validation lên giao diện
+     */
     displayErrors() {
-      // Clear previous errors
+      // Xóa các lỗi cũ trước khi hiển thị lỗi mới
       this.clearErrors();
 
+      // Duyệt qua tất cả các field có lỗi
       Object.keys(this.errors).forEach(fieldName => {
         const field = this.form.querySelector(`[name="${fieldName}"]`);
         if (!field) return;
 
+        // Tạo container chứa thông báo lỗi
         const errorContainer = this.createErrorContainer(fieldName);
         const errors = this.errors[fieldName];
         
+        // Tạo element hiển thị từng lỗi
         errors.forEach(error => {
           const errorElement = document.createElement('div');
           errorElement.className = 'validation-error';
@@ -159,9 +195,10 @@
           errorContainer.appendChild(errorElement);
         });
 
+        // Thêm class CSS để đánh dấu field có lỗi
         field.classList.add('error');
         
-        // Insert error container after the field's parent div
+        // Chèn container lỗi vào DOM
         const fieldParent = field.closest('.field') || field.parentNode;
         if (fieldParent) {
           fieldParent.appendChild(errorContainer);
@@ -171,7 +208,11 @@
       });
     }
 
-    // Create error container
+    /**
+     * Tạo container chứa thông báo lỗi cho field
+     * @param {string} fieldName - Tên field
+     * @returns {HTMLElement} - Container element
+     */
     createErrorContainer(fieldName) {
       const container = document.createElement('div');
       container.className = 'validation-errors';
@@ -179,45 +220,51 @@
       return container;
     }
 
-    // Clear all validation errors
+    /**
+     * Xóa tất cả các lỗi validation khỏi giao diện
+     */
     clearErrors() {
-      // Remove error classes
+      // Xóa class CSS lỗi khỏi các field
       this.form.querySelectorAll('.error').forEach(field => {
         field.classList.remove('error');
       });
 
-      // Remove error messages
+      // Xóa tất cả thông báo lỗi khỏi DOM
       this.form.querySelectorAll('.validation-errors').forEach(container => {
         container.remove();
       });
     }
 
-    // Add real-time validation
+    /**
+     * Thêm validation real-time (kiểm tra ngay khi người dùng nhập liệu)
+     */
     addRealTimeValidation() {
       Object.keys(this.rules).forEach(fieldName => {
         const field = this.form.querySelector(`[name="${fieldName}"]`);
         if (!field) return;
 
-        // Validate on blur
+        // Kiểm tra validation khi người dùng rời khỏi field (blur)
         field.addEventListener('blur', () => {
           const value = field.value;
           const result = this.validateField(fieldName, value);
           
           if (!result.valid) {
+            // Hiển thị lỗi đầu tiên nếu có lỗi
             this.showFieldError(fieldName, result.errors[0]);
           } else {
+            // Xóa lỗi và đánh dấu field hợp lệ
             this.clearFieldError(fieldName);
             field.classList.add('success');
           }
         });
 
-        // Clear error on focus
+        // Xóa lỗi khi người dùng focus vào field
         field.addEventListener('focus', () => {
           this.clearFieldError(fieldName);
           field.classList.remove('error', 'success');
         });
 
-        // Validate on input for better UX
+        // Xóa lỗi khi người dùng bắt đầu nhập liệu (để cải thiện UX)
         field.addEventListener('input', () => {
           const value = field.value;
           if (value.trim() === '') {
@@ -228,25 +275,30 @@
       });
     }
 
-    // Show error for specific field
+    /**
+     * Hiển thị lỗi cho một field cụ thể
+     * @param {string} fieldName - Tên field
+     * @param {string} message - Thông báo lỗi
+     */
     showFieldError(fieldName, message) {
       const field = this.form.querySelector(`[name="${fieldName}"]`);
       if (!field) return;
 
+      // Đánh dấu field có lỗi
       field.classList.add('error');
       field.classList.remove('success');
       
-      // Remove existing error for this field
+      // Xóa lỗi cũ của field này
       this.clearFieldError(fieldName);
       
-      // Add new error
+      // Tạo và hiển thị lỗi mới
       const errorContainer = this.createErrorContainer(fieldName);
       const errorElement = document.createElement('div');
       errorElement.className = 'validation-error';
       errorElement.textContent = message;
       errorContainer.appendChild(errorElement);
       
-      // Insert error container after the field's parent div
+      // Chèn container lỗi vào DOM
       const fieldParent = field.closest('.field') || field.parentNode;
       if (fieldParent) {
         fieldParent.appendChild(errorContainer);
@@ -255,13 +307,18 @@
       }
     }
 
-    // Clear error for specific field
+    /**
+     * Xóa lỗi cho một field cụ thể
+     * @param {string} fieldName - Tên field
+     */
     clearFieldError(fieldName) {
       const field = this.form.querySelector(`[name="${fieldName}"]`);
       if (!field) return;
 
+      // Xóa các class CSS lỗi
       field.classList.remove('error', 'success');
       
+      // Xóa container lỗi khỏi DOM
       const errorContainer = this.form.querySelector(`.validation-errors[data-field="${fieldName}"]`);
       if (errorContainer) {
         errorContainer.remove();
@@ -269,21 +326,27 @@
     }
   }
 
-  // Specific form validators
+  /**
+   * Validator cho form Bán Hàng
+   * Kế thừa từ FormValidator và thiết lập các quy tắc riêng cho bán hàng
+   */
   class BanHangValidator extends FormValidator {
     constructor() {
       super('banhang-form');
       this.setupBanHangRules();
     }
 
+    /**
+     * Thiết lập các quy tắc validation cho form bán hàng
+     */
     setupBanHangRules() {
-      // Search validation
+      // Validation cho ô tìm kiếm
       this.addRule('search', {
         minLength: 2,
         message: 'Tối thiểu 2 ký tự để tìm kiếm'
       });
 
-      // Quantity validation
+      // Validation cho số lượng
       this.addRule('quantity', {
         required: true,
         pattern: ValidationRules.patterns.quantity,
@@ -292,7 +355,7 @@
         message: 'Số lượng phải từ 1-999'
       });
 
-      // Price validation
+      // Validation cho giá tiền
       this.addRule('price', {
         required: true,
         pattern: ValidationRules.patterns.price,
@@ -302,14 +365,21 @@
     }
   }
 
+  /**
+   * Validator cho form Khách Hàng
+   * Kế thừa từ FormValidator và thiết lập các quy tắc riêng cho khách hàng
+   */
   class KhachHangValidator extends FormValidator {
     constructor() {
       super('khachhang-form');
       this.setupKhachHangRules();
     }
 
+    /**
+     * Thiết lập các quy tắc validation cho form khách hàng
+     */
     setupKhachHangRules() {
-      // Name validation
+      // Validation cho tên khách hàng
       this.addRule('name', {
         required: true,
         pattern: ValidationRules.patterns.vietnameseName,
@@ -318,20 +388,20 @@
         message: 'Tên khách hàng không hợp lệ'
       });
 
-      // Phone validation
+      // Validation cho số điện thoại
       this.addRule('phone', {
         required: true,
         pattern: ValidationRules.patterns.phone,
         message: ValidationRules.messages.phone
       });
 
-      // Email validation (optional)
+      // Validation cho email (không bắt buộc)
       this.addRule('email', {
         pattern: ValidationRules.patterns.email,
         message: ValidationRules.messages.email
       });
 
-      // Address validation
+      // Validation cho địa chỉ
       this.addRule('address', {
         maxLength: 200,
         message: 'Địa chỉ không được quá 200 ký tự'
@@ -339,21 +409,28 @@
     }
   }
 
+  /**
+   * Validator cho form Dược Phẩm
+   * Kế thừa từ FormValidator và thiết lập các quy tắc riêng cho dược phẩm
+   */
   class DuocPhamValidator extends FormValidator {
     constructor() {
       super('duocpham-form');
       this.setupDuocPhamRules();
     }
 
+    /**
+     * Thiết lập các quy tắc validation cho form dược phẩm
+     */
     setupDuocPhamRules() {
-      // Drug code validation
+      // Validation cho mã thuốc
       this.addRule('code', {
         required: true,
         pattern: ValidationRules.patterns.drugCode,
         message: ValidationRules.messages.drugCode
       });
 
-      // Drug name validation
+      // Validation cho tên thuốc
       this.addRule('name', {
         required: true,
         minLength: 2,
@@ -361,7 +438,7 @@
         message: 'Tên thuốc không hợp lệ'
       });
 
-      // Active ingredient validation
+      // Validation cho hoạt chất
       this.addRule('ingredient', {
         required: true,
         minLength: 2,
@@ -369,7 +446,7 @@
         message: 'Hoạt chất không hợp lệ'
       });
 
-      // Manufacturer validation
+      // Validation cho nhà sản xuất
       this.addRule('manufacturer', {
         required: true,
         minLength: 2,
@@ -377,7 +454,7 @@
         message: 'Nhà sản xuất không hợp lệ'
       });
 
-      // Price validation
+      // Validation cho giá tiền
       this.addRule('price', {
         required: true,
         pattern: ValidationRules.patterns.price,
@@ -388,21 +465,28 @@
   }
 
 
+  /**
+   * Validator cho form Kho
+   * Kế thừa từ FormValidator và thiết lập các quy tắc riêng cho quản lý kho
+   */
   class KhoValidator extends FormValidator {
     constructor() {
       super('kho-form');
       this.setupKhoRules();
     }
 
+    /**
+     * Thiết lập các quy tắc validation cho form kho
+     */
     setupKhoRules() {
-      // Drug code validation
+      // Validation cho mã thuốc
       this.addRule('drugCode', {
         required: true,
         pattern: ValidationRules.patterns.drugCode,
         message: ValidationRules.messages.drugCode
       });
 
-      // Quantity validation
+      // Validation cho số lượng
       this.addRule('quantity', {
         required: true,
         pattern: ValidationRules.patterns.quantity,
@@ -411,7 +495,7 @@
         message: 'Số lượng không hợp lệ'
       });
 
-      // Expiry date validation
+      // Validation cho hạn sử dụng
       this.addRule('expiryDate', {
         required: true,
         date: true,
@@ -419,7 +503,7 @@
         message: 'Hạn sử dụng phải là tương lai'
       });
 
-      // Batch number validation
+      // Validation cho số lô
       this.addRule('batchNumber', {
         required: true,
         minLength: 3,
@@ -427,7 +511,7 @@
         message: 'Số lô không hợp lệ'
       });
 
-      // Import price validation
+      // Validation cho giá nhập
       this.addRule('importPrice', {
         required: true,
         pattern: ValidationRules.patterns.price,
@@ -435,7 +519,7 @@
         message: 'Giá nhập không hợp lệ'
       });
 
-      // Selling price validation
+      // Validation cho giá bán
       this.addRule('sellingPrice', {
         required: true,
         pattern: ValidationRules.patterns.price,
@@ -445,14 +529,21 @@
     }
   }
 
+  /**
+   * Validator cho form Nhân Sự
+   * Kế thừa từ FormValidator và thiết lập các quy tắc riêng cho quản lý nhân sự
+   */
   class NhanSuValidator extends FormValidator {
     constructor() {
       super('nhan-su-form');
       this.setupNhanSuRules();
     }
 
+    /**
+     * Thiết lập các quy tắc validation cho form nhân sự
+     */
     setupNhanSuRules() {
-      // Employee code validation
+      // Validation cho mã nhân viên
       this.addRule('employeeCode', {
         required: true,
         minLength: 3,
@@ -460,7 +551,7 @@
         message: 'Mã nhân viên phải từ 3-20 ký tự'
       });
 
-      // Full name validation
+      // Validation cho họ tên
       this.addRule('fullName', {
         required: true,
         pattern: ValidationRules.patterns.vietnameseName,
@@ -469,20 +560,20 @@
         message: 'Họ tên không hợp lệ'
       });
 
-      // Phone validation
+      // Validation cho số điện thoại
       this.addRule('phone', {
         required: true,
         pattern: ValidationRules.patterns.phone,
         message: ValidationRules.messages.phone
       });
 
-      // Email validation (optional)
+      // Validation cho email (không bắt buộc)
       this.addRule('email', {
         pattern: ValidationRules.patterns.email,
         message: ValidationRules.messages.email
       });
 
-      // Birth date validation
+      // Validation cho ngày sinh
       this.addRule('birthDate', {
         required: true,
         date: true,
@@ -490,19 +581,19 @@
         message: 'Ngày sinh không hợp lệ'
       });
 
-      // Gender validation
+      // Validation cho giới tính
       this.addRule('gender', {
         required: true,
         message: 'Vui lòng chọn giới tính'
       });
 
-      // Position validation
+      // Validation cho chức vụ
       this.addRule('position', {
         required: true,
         message: 'Vui lòng chọn chức vụ'
       });
 
-      // Base salary validation
+      // Validation cho lương cơ bản
       this.addRule('baseSalary', {
         required: true,
         pattern: ValidationRules.patterns.price,
@@ -511,13 +602,13 @@
         message: 'Lương cơ bản phải từ 1,000,000 - 100,000,000₫'
       });
 
-      // Address validation
+      // Validation cho địa chỉ
       this.addRule('address', {
         maxLength: 200,
         message: 'Địa chỉ không được quá 200 ký tự'
       });
 
-      // Start date validation
+      // Validation cho ngày bắt đầu làm việc
       this.addRule('startDate', {
         required: true,
         date: true,
@@ -529,7 +620,9 @@
 
 
 
-  // Export validators
+  /**
+   * Xuất các validator ra global scope để có thể sử dụng trong các file khác
+   */
   window.FormValidator = FormValidator;
   window.BanHangValidator = BanHangValidator;
   window.KhachHangValidator = KhachHangValidator;
